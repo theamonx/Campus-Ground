@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Download, Plus, Search, Filter, Edit2 } from "lucide-react";
 import type { Student } from "@/types";
+import ProfessorLayout from "@/layouts/professor-layout";
 
 const students: Student[] = [
   { id: 1, name: "Ananya Sharma", roll: "CS21001", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format", attendance: 92, grade: "A+", gpa: 9.4 },
@@ -13,7 +14,7 @@ const students: Student[] = [
   { id: 8, name: "Dev Patel", roll: "CS21008", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&auto=format", attendance: 73, grade: "B", gpa: 7.2 },
 ];
 
-export function ProfGrades() {
+export default function ProfGrades() {
   const [subject, setSubject] = useState("Data Structures");
   const [studentsList, setStudentsList] = useState(students);
   const [query, setQuery] = useState("");
@@ -119,3 +120,6 @@ export function ProfGrades() {
     </div>
   );
 }
+
+
+ProfGrades.layout = (page: React.ReactNode) => <ProfessorLayout children={page} />;

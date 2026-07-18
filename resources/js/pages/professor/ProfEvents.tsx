@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Plus, Calendar, MapPin, Eye, Edit2 } from "lucide-react";
 import type { Event } from "@/types";
+import ProfessorLayout from "@/layouts/professor-layout";
 
 const profEvents: Event[] = [
   { id: 1, title: "TechFest 2025 — Annual Tech Festival", date: "Dec 10–12, 2025", venue: "Main Auditorium", registered: 840, capacity: 1200 },
@@ -8,7 +9,7 @@ const profEvents: Event[] = [
   { id: 3, title: "Hackathon Prelims — Round 1", date: "Nov 22, 2025", venue: "Lab Block 3", registered: 124, capacity: 200 },
 ];
 
-export function ProfEvents() {
+export default function ProfEvents() {
   const [eventList, setEventList] = useState(profEvents);
 
   const createEvent = () => {
@@ -87,3 +88,5 @@ export function ProfEvents() {
     </div>
   );
 }
+
+ProfEvents.layout = (page: React.ReactNode) => <ProfessorLayout children={page} />;

@@ -3,8 +3,9 @@ import { GroupCard } from "./groups/GroupCard";
 import { GroupDetails } from "./groups/GroupDetails";
 import { GroupModal } from "./groups/GroupModal";
 import { useStuGroupsWorkflow } from "@/hooks/useStuGroupsWorkflow";
+import StudentLayout from '@/layouts/student-layout';
 
-export function StuGroups() {
+export default function StuGroups() {
   const {
     groupsLoading,
     selectedGroup,
@@ -188,3 +189,6 @@ export function StuGroups() {
     </div>
   );
 }
+
+
+StuGroups.layout = (page: React.ReactNode) => <StudentLayout children={page} />;

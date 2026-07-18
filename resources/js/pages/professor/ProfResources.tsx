@@ -1,6 +1,7 @@
 import { Plus, Upload, Download } from "lucide-react";
+import ProfessorLayout from "@/layouts/professor-layout";
 
-export function ProfResources() {
+export default function ProfResources() {
   const folders = [
     { name: "Lecture Slides", files: 24, size: "340 MB", icon: "📊", updated: "Nov 17" },
     { name: "Lab Manuals", files: 8, size: "120 MB", icon: "🔬", updated: "Nov 10" },
@@ -34,7 +35,7 @@ export function ProfResources() {
   const downloadFile = (name: string) => {
     window.alert(`Preparing download for ${name}.`);
   };
-  
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -72,3 +73,6 @@ export function ProfResources() {
     </div>
   );
 }
+
+
+ProfResources.layout = (page: React.ReactNode) => <ProfessorLayout children={page} />;

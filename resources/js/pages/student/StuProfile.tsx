@@ -1,7 +1,8 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Settings, CheckCircle, X, Save, Pencil } from 'lucide-react';
+import StudentLayout from '@/layouts/student-layout';
 
-export function StuProfile() {
+export default function StuProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
     name: 'Priya Nair',
@@ -89,10 +90,10 @@ export function StuProfile() {
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
         {/* Cover Image */}
         <div className="h-36 relative">
-          <img 
-            src={isEditing ? editForm.cover : profile.cover} 
-            alt="Cover" 
-            className="w-full h-full object-cover opacity-30" 
+          <img
+            src={isEditing ? editForm.cover : profile.cover}
+            alt="Cover"
+            className="w-full h-full object-cover opacity-30"
           />
           {isEditing && (
             <label className="absolute top-3 right-3 p-2 bg-black/40 rounded-lg text-white/70 hover:text-white transition-colors cursor-pointer">
@@ -111,10 +112,10 @@ export function StuProfile() {
           <div className="flex items-end justify-between -mt-8 mb-4">
             {/* Profile Picture */}
             <div className="relative group">
-              <img 
-                src={isEditing ? editForm.avatar : profile.avatar} 
-                alt="Profile" 
-                className="w-20 h-20 rounded-2xl object-cover border-4 border-card" 
+              <img
+                src={isEditing ? editForm.avatar : profile.avatar}
+                alt="Profile"
+                className="w-20 h-20 rounded-2xl object-cover border-4 border-card"
               />
               <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-400 border-2 border-card" />
               {isEditing && (
@@ -134,7 +135,7 @@ export function StuProfile() {
             <div className="flex items-center gap-2">
               {!isEditing ? (
                 <>
-                  <button 
+                  <button
                     onClick={() => { setEditForm(profile); setIsEditing(true); }}
                     className="px-4 py-1.5 bg-secondary border border-border rounded-lg text-sm hover:bg-card transition-colors"
                   >
@@ -146,14 +147,14 @@ export function StuProfile() {
                 </>
               ) : (
                 <>
-                  <button 
-                    onClick={handleSave} 
+                  <button
+                    onClick={handleSave}
                     className="px-4 py-1.5 bg-primary text-background rounded-lg text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
                   >
                     <Save size={16} /> Save
                   </button>
-                  <button 
-                    onClick={handleCancel} 
+                  <button
+                    onClick={handleCancel}
                     className="px-4 py-1.5 bg-secondary border border-border rounded-lg text-sm hover:bg-card transition-colors flex items-center gap-2"
                   >
                     <X size={16} /> Cancel
@@ -163,11 +164,11 @@ export function StuProfile() {
             </div>
           </div>
 
-       
-       
+
+
           {isEditing ? (
             <div className="space-y-4">
-             
+
 
 
               <div>
@@ -238,8 +239,8 @@ export function StuProfile() {
                     className="flex-1 px-3 py-2 bg-secondary border border-border rounded-lg text-sm text-foreground placeholder-muted-foreground"
                     placeholder="Add a skill..."
                   />
-                  <button 
-                    onClick={addSkill} 
+                  <button
+                    onClick={addSkill}
                     className="px-4 py-2 bg-primary text-background rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
                   >
                     Add
@@ -247,13 +248,13 @@ export function StuProfile() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {editForm.skills.map((skill) => (
-                    <span 
-                      key={skill} 
+                    <span
+                      key={skill}
                       className="text-xs bg-primary/20 border border-primary/40 px-3 py-1 rounded-full text-foreground flex items-center gap-2"
                     >
                       {skill}
-                      <button 
-                        onClick={() => removeSkill(skill)} 
+                      <button
+                        onClick={() => removeSkill(skill)}
                         className="hover:text-red-400 transition-colors"
                       >
                         ×
@@ -339,3 +340,6 @@ export function StuProfile() {
     </div>
   );
 }
+
+
+StuProfile.layout = (page: React.ReactNode) => <StudentLayout children={page} />;

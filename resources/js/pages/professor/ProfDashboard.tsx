@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Plus, Star, Bell } from "lucide-react";
 import { StatCard } from "@/common";
 import type { Student, Notice } from "@/types";
+import ProfessorLayout from "@/layouts/professor-layout";
 
 const students: Student[] = [
   { id: 1, name: "Ananya Sharma", roll: "CS21001", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format", attendance: 92, grade: "A+", gpa: 9.4 },
@@ -21,7 +22,7 @@ const notices: Notice[] = [
   { id: 4, title: "Submission portal will be down Nov 14", target: "CS 3rd Year", date: "Nov 7, 2025", pinned: false },
 ];
 
-export function ProfDashboard() {
+export default function ProfDashboard() {
   const takeAttendance = () => {
     window.alert("Open the Attendance tab to mark attendance for the current class.");
   };
@@ -98,3 +99,4 @@ export function ProfDashboard() {
     </div>
   );
 }
+ProfDashboard.layout = (page: React.ReactNode) => <ProfessorLayout children={page} />;

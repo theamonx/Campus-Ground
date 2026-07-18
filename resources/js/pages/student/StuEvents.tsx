@@ -7,8 +7,9 @@ import {
   CheckCircle,
   X,
 } from "lucide-react";
+import StudentLayout from '@/layouts/student-layout';
 
-export function StuEvents() {
+export default function StuEvents() {
   const [events, setEvents] = useState([
     {
       id: 1,
@@ -100,7 +101,7 @@ export function StuEvents() {
         date: formData.date || "TBA",
         venue: formData.venue || "Campus",
         registered: false,
-        spots: "Open Registration",
+spots: "Open Registration",
         tag: formData.tag || "Campus Event",
         image:
           formData.image ||
@@ -384,3 +385,6 @@ export function StuEvents() {
     </>
   );
 }
+
+
+StuEvents.layout = (page: React.ReactNode) => <StudentLayout children={page} />;

@@ -1,6 +1,7 @@
 import { Plus, Users, Settings } from "lucide-react";
+import ProfessorLayout from "@/layouts/professor-layout";
 
-export function ProfGroups() {
+export default function ProfGroups() {
   const groups = [
     { name: "CS 2025 — Batch A", members: 62, type: "Batch", active: true, avatar: "🎓" },
     { name: "CS-402: Data Structures", members: 62, type: "Subject", active: true, avatar: "📊" },
@@ -19,7 +20,7 @@ export function ProfGroups() {
   const openGroup = (name: string) => {
     window.alert(`Opening ${name}.`);
   };
-  
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -48,3 +49,5 @@ export function ProfGroups() {
     </div>
   );
 }
+
+ProfGroups.layout = (page: React.ReactNode) => <ProfessorLayout children={page} />;

@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { Megaphone, Shield, Eye, User, ThumbsUp, MessageCircle, Flag, Send } from "lucide-react";
 import { AnonAvatar, ProtestStatus } from "@/common";
 import type { Protest } from "@/types";
+import StudentLayout from '@/layouts/student-layout';
+import { useStudent } from '@/contexts/StudentContext';
 
 const protests: Protest[] = [
   { id: 1, title: "24-hour library access during exam week", support: 847, comments: 134, status: "escalated", anon: false, time: "2 days ago", body: "The library consistently closes at 8 PM even during finals week. Students from hostels have no quiet study space after that. We are requesting the administration to extend hours to at least midnight, or ideally 24 hours, from 3 days before exams." },
@@ -9,7 +11,8 @@ const protests: Protest[] = [
   { id: 3, title: "Fix the broken ACs in Lab Block 3", support: 203, comments: 41, status: "resolved", anon: false, time: "1 week ago", body: "Lab Block 3 AC units have been broken for 6 weeks during summer. This was reported to maintenance on Nov 1 with no response." },
 ];
 
-export function StuProtests({ anon }: { anon: boolean }) {
+export default function StuProtests() {
+  const { anon } = useStudent();
   const [protestList, setProtestList] = useState(protests);
   const [expanded, setExpanded] = useState<number | null>(1);
   const [comment, setComment] = useState("");
@@ -99,3 +102,6 @@ export function StuProtests({ anon }: { anon: boolean }) {
     </div>
   );
 }
+
+
+StuProtests.layout = (page: React.ReactNode) => <StudentLayout children={page} />;

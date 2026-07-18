@@ -2,7 +2,10 @@ import { Swords, Clock, CheckCircle, XCircle, Zap, User } from "lucide-react";
 import { ChallengeSomeoneModal } from "./duels/ChallengeSomeoneModal";
 import { useStuDuelWorkflow } from "@/hooks/useStuDuelWorkflow";
 
-export function StuDuels({ anon: _ }: { anon: boolean }) {
+import StudentLayout from '@/layouts/student-layout';
+import { useStudent } from '@/contexts/StudentContext';
+
+export default function StuDuels() {
   const {
     duels,
     duelsLoading,
@@ -24,6 +27,7 @@ export function StuDuels({ anon: _ }: { anon: boolean }) {
     accept,
     decline,
   } = useStuDuelWorkflow();
+  const { anon } = useStudent();
 
   const catColors: Record<string, string> = { Coding: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20", Quiz: "text-blue-400 bg-blue-500/10 border-blue-500/20", Debate: "text-orange-400 bg-orange-500/10 border-orange-500/20" };
 
@@ -138,3 +142,5 @@ export function StuDuels({ anon: _ }: { anon: boolean }) {
     </div>
   );
 }
+
+StuDuels.layout = (page: React.ReactNode) => <StudentLayout children={page} />;

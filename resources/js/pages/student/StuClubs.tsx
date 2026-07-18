@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Settings } from "lucide-react";
 import type { Club } from "@/types";
+import StudentLayout from '@/layouts/student-layout';
 
 const clubs: Club[] = [
   { id: 1, name: "Dev Club", emoji: "💻", members: 320, category: "Tech", joined: true, desc: "Coding, hackathons, and open source." },
@@ -11,7 +12,7 @@ const clubs: Club[] = [
   { id: 6, name: "Music Club", emoji: "🎵", members: 160, category: "Arts", joined: false, desc: "Jam sessions, inter-college fests, studios." },
 ];
 
-export function StuClubs() {
+export default function StuClubs() {
   const [clubList, setClubList] = useState(clubs);
   const toggle = (id: number) => setClubList(c => c.map(x => x.id === id ? { ...x, joined: !x.joined } : x));
   const cats = ["All", "Tech", "Creative", "Culture", "Business", "Arts"];
@@ -43,3 +44,6 @@ export function StuClubs() {
     </div>
   );
 }
+
+
+StuClubs.layout = (page: React.ReactNode) => <StudentLayout children={page} />;

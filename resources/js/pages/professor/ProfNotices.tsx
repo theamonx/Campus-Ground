@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Send, Star, Edit2, Trash2 } from "lucide-react";
 import type { Notice } from "@/types";
+import ProfessorLayout from "@/layouts/professor-layout";
 
 const notices: Notice[] = [
   { id: 1, title: "Mid-semester examination schedule released", target: "CS 3rd Year", date: "Nov 12, 2025", pinned: true },
@@ -9,7 +10,7 @@ const notices: Notice[] = [
   { id: 4, title: "Submission portal will be down Nov 14", target: "CS 3rd Year", date: "Nov 7, 2025", pinned: false },
 ];
 
-export function ProfNotices() {
+export default function ProfNotices() {
   const [noticeList, setNoticeList] = useState(notices);
   const [sel, setSel] = useState<number | null>(null);
   const [title, setTitle] = useState("");
@@ -104,3 +105,6 @@ export function ProfNotices() {
     </div>
   );
 }
+
+
+ProfNotices.layout = (page: React.ReactNode) => <ProfessorLayout children={page} />;

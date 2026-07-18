@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Plus, Check, X, UserCheck, UserX, MoreHorizontal } from "lucide-react";
 import { StatCard } from "@/common";
 import type { Student } from "@/types";
+import ProfessorLayout from "@/layouts/professor-layout";
 
 const students: Student[] = [
   { id: 1, name: "Ananya Sharma", roll: "CS21001", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format", attendance: 92, grade: "A+", gpa: 9.4 },
@@ -14,7 +15,7 @@ const students: Student[] = [
   { id: 8, name: "Dev Patel", roll: "CS21008", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&auto=format", attendance: 73, grade: "B", gpa: 7.2 },
 ];
 
-export function ProfAttendance() {
+export default function ProfAttendance() {
   const [taking, setTaking] = useState(false);
   const [present, setPresent] = useState<Set<number>>(new Set([1, 2, 3, 5, 7]));
   const toggle = (id: number) => setPresent(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
@@ -85,3 +86,5 @@ export function ProfAttendance() {
     </div>
   );
 }
+
+ProfAttendance.layout = (page: React.ReactNode) => <ProfessorLayout children={page} />;

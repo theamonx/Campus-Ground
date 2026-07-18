@@ -198,3 +198,17 @@ export type Achievement = {
   points: number;
   verified: boolean;
 };
+
+// Append this to your existing resources/js/types/index.ts
+
+export interface PageSharedProps {
+    auth: {
+        user: CampusUser;
+        // You can add extra session tags here, like permissions or token structures
+    };
+    flash: {
+        success?: string | null;
+        error?: string | null;
+    };
+    [key: string]: any; // Fallback index signature to support general Inertia properties
+}

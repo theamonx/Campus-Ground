@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Plus, Eye, Edit2, Trash2, Clock, Users } from "lucide-react";
 import { AssignBadge } from "@/common";
 import type { Assignment } from "@/types";
+import ProfessorLayout from "@/layouts/professor-layout";
 
 const assignments: Assignment[] = [
   { id: 1, title: "Binary Search Tree Implementation", subject: "Data Structures", due: "Nov 20, 2025", submitted: 38, total: 62, status: "active" },
@@ -10,7 +11,7 @@ const assignments: Assignment[] = [
   { id: 4, title: "TCP/IP Layer Analysis", subject: "Computer Networks", due: "Dec 2, 2025", submitted: 0, total: 62, status: "draft" },
 ];
 
-export function ProfAssignments() {
+export default function ProfAssignments() {
   const [assignmentList, setAssignmentList] = useState(assignments);
 
   const createAssignment = () => {
@@ -89,3 +90,5 @@ export function ProfAssignments() {
     </div>
   );
 }
+
+ProfAssignments.layout = (page: React.ReactNode) => <ProfessorLayout children={page} />;

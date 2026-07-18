@@ -5,7 +5,9 @@ import {
   X,
 } from "lucide-react";
 
-export function StuAchievements() {
+import StudentLayout from '@/layouts/student-layout';
+
+export default function StuAchievements() {
   const [tab, setTab] = useState<"mine" | "leaderboard">("mine");
 
   const [showModal, setShowModal] = useState(false);
@@ -512,3 +514,4 @@ export function StuAchievements() {
   );
 }
 
+StuAchievements.layout = (page: React.ReactNode) => <StudentLayout children={page} />;

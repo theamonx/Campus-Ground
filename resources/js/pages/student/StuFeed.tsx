@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { Shield, Send, Image, Link2, Hash, Trophy, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Eye, EyeOff } from "lucide-react";
+import StudentLayout from '@/layouts/student-layout';
+import { useStudent } from '@/contexts/StudentContext';
 import { AnonAvatar, TypePill } from "@/common";
 import type { Post } from "@/types";
 
@@ -11,7 +13,8 @@ const feedPosts: Post[] = [
   { id: 5, author: "Ananya Sharma", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format", handle: "@ananya.s", time: "5h ago", type: "achievement", content: "Google Summer of Code 2025 acceptance just dropped into my inbox. Genuinely cannot believe it. Years of open source contributions — this is what it was for.", tag: "Achievement", likes: 426, comments: 58, liked: true, saved: true },
 ];
 
-export function StuFeed({ anon }: { anon: boolean }) {
+export default function StuFeed() {
+  const { anon } = useStudent();
   const [posts, setPosts] = useState(feedPosts);
   const [draft, setDraft] = useState("");
   const [draftTag, setDraftTag] = useState("");
@@ -147,3 +150,5 @@ export function StuFeed({ anon }: { anon: boolean }) {
     </div>
   );
 }
+
+StuFeed.layout = (page: React.ReactNode) => <StudentLayout children={page} />;
