@@ -1,0 +1,9 @@
+export { StuFeed } from "./StuFeed";
+export { StuProfile } from "./StuProfile";
+export { StuAchievements } from "./StuAchievements";
+export { StuDuels } from "./StuDuels";
+export { StuGroups } from "./StuGroups";
+export { StuClubs } from "./StuClubs";
+export { StuEvents } from "./StuEvents";
+export { StuProtests } from "./StuProtests";
+export { StudentPage } from "./StudentPage";

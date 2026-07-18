@@ -1,0 +1,9 @@
+export { ProfDashboard } from "./ProfDashboard";
+export { ProfGrades } from "./ProfGrades";
+export { ProfAttendance } from "./ProfAttendance";
+export { ProfAssignments } from "./ProfAssignments";
+export { ProfResources } from "./ProfResources";
+export { ProfNotices } from "./ProfNotices";
+export { ProfEvents } from "./ProfEvents";
+export { ProfGroups } from "./ProfGroups";
+export { ProfessorPage } from "./ProfessorPage";
