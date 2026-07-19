@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 
 Route::inertia('/', 'home')->name('home');
+Route::inertia('/login', 'login')->name('login');
 Route::get('/student', [StudentController::class, 'index']);
 Route::inertia('/student/profile', 'student/StuProfile');
 Route::inertia('/student/achievements', 'student/StuAchievements');

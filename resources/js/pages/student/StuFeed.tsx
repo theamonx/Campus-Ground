@@ -5,17 +5,17 @@ import { useStudent } from '@/contexts/StudentContext';
 import { AnonAvatar, TypePill } from "@/common";
 import type { Post } from "@/types";
 
-const feedPosts: Post[] = [
-  { id: 1, author: "Meera Joshi", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&auto=format", handle: "@meera.joshi", time: "2m ago", type: "achievement", content: "Just cleared HackBit 2025 and placed 1st in the Systems track! 8 months of grinding finally paid off. Thank you @DevClub for the prep sessions 🏆", tag: "Achievement", likes: 148, comments: 24, liked: false, saved: false },
-  { id: 2, author: "Anonymous", avatar: "", handle: "@anon·protected", time: "14m ago", type: "protest", content: "The library closes at 8 PM during exam week. That's actively hurting our preparation. We need 24-hour access at least during finals. Who's with me?", tag: "Protest", likes: 312, comments: 67, liked: true, saved: false, anon: true },
-  { id: 3, author: "Dev Club", avatar: "", handle: "@devclub.official", time: "1h ago", type: "event", content: "Winter Hackathon registrations are open! 48 hours, ₹50,000 in prizes, and a chance to present to real VCs. Teams of 2–4. Last 30 spots left.", tag: "Event", likes: 89, comments: 15, liked: false, saved: true, image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=280&fit=crop&auto=format" },
-  { id: 4, author: "Rohan Mehta", avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=80&h=80&fit=crop&auto=format", handle: "@rohan.m", time: "3h ago", type: "duel", content: "Just accepted @karan.s's LeetCode duel. Medium difficulty, 45 mins. Voting closes in 2 hours — who do you think solves it first? 🔥", tag: "Duel", likes: 43, comments: 19, liked: false, saved: false },
-  { id: 5, author: "Ananya Sharma", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format", handle: "@ananya.s", time: "5h ago", type: "achievement", content: "Google Summer of Code 2025 acceptance just dropped into my inbox. Genuinely cannot believe it. Years of open source contributions — this is what it was for.", tag: "Achievement", likes: 426, comments: 58, liked: true, saved: true },
-];
+// const feedPosts: Post[] = [
+//   { id: 1, author: "Meera Joshi", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&auto=format", handle: "@meera.joshi", time: "2m ago", type: "achievement", content: "Just cleared HackBit 2025 and placed 1st in the Systems track! 8 months of grinding finally paid off. Thank you @DevClub for the prep sessions 🏆", tag: "Achievement", likes: 148, comments: 24, liked: false, saved: false },
+//   { id: 2, author: "Anonymous", avatar: "", handle: "@anon·protected", time: "14m ago", type: "protest", content: "The library closes at 8 PM during exam week. That's actively hurting our preparation. We need 24-hour access at least during finals. Who's with me?", tag: "Protest", likes: 312, comments: 67, liked: true, saved: false, anon: true },
+//   { id: 3, author: "Dev Club", avatar: "", handle: "@devclub.official", time: "1h ago", type: "event", content: "Winter Hackathon registrations are open! 48 hours, ₹50,000 in prizes, and a chance to present to real VCs. Teams of 2–4. Last 30 spots left.", tag: "Event", likes: 89, comments: 15, liked: false, saved: true, image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=280&fit=crop&auto=format" },
+//   { id: 4, author: "Rohan Mehta", avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=80&h=80&fit=crop&auto=format", handle: "@rohan.m", time: "3h ago", type: "duel", content: "Just accepted @karan.s's LeetCode duel. Medium difficulty, 45 mins. Voting closes in 2 hours — who do you think solves it first? 🔥", tag: "Duel", likes: 43, comments: 19, liked: false, saved: false },
+//   { id: 5, author: "Ananya Sharma", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format", handle: "@ananya.s", time: "5h ago", type: "achievement", content: "Google Summer of Code 2025 acceptance just dropped into my inbox. Genuinely cannot believe it. Years of open source contributions — this is what it was for.", tag: "Achievement", likes: 426, comments: 58, liked: true, saved: true },
+// ];
 
-export default function StuFeed() {
+export default function StuFeed({ thoughts }) {
   const { anon } = useStudent();
-  const [posts, setPosts] = useState(feedPosts);
+  const [posts, setPosts] = useState(thoughts);
   const [draft, setDraft] = useState("");
   const [draftTag, setDraftTag] = useState("");
   const [draftLink, setDraftLink] = useState("");
@@ -125,15 +125,15 @@ export default function StuFeed() {
         <div key={post.id} className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              {post.anon ? <AnonAvatar /> : <img src={post.avatar} alt={post.author} className="w-10 h-10 rounded-full object-cover" />}
+              {!post.anon ? <AnonAvatar /> : <img src={post.avatar} alt={post.user_id} className="w-10 h-10 rounded-full object-cover" />}
               <div>
-                <div className="flex items-center gap-2"><p className="text-sm font-semibold">{post.author}</p>{post.anon && <span className="flex items-center gap-1 text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20"><Shield size={8} />Protected</span>}</div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><span>{post.handle}</span><span>·</span><span>{post.time}</span></div>
+                <div className="flex items-center gap-2"><p className="text-sm font-semibold">{post.user.name}</p>{post.anon ? <span className="flex items-center gap-1 text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20"><Shield size={8} />Protected</span> : ''}</div>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><span>{post.user.email}</span><span>·</span><span>{post.relative_time}</span></div>
               </div>
             </div>
             <div className="flex items-center gap-2"><TypePill type={post.type} /><button className="text-muted-foreground hover:text-foreground p-1"><MoreHorizontal size={15} /></button></div>
           </div>
-          <p className="text-sm leading-relaxed text-foreground/90">{post.content}</p>
+          <p className="text-sm leading-relaxed text-foreground/90">{post.message}</p>
           {post.image && <div className="rounded-xl overflow-hidden bg-secondary"><img src={post.image} alt="Post" className="w-full object-cover max-h-60" /></div>}
           <div className="flex items-center gap-1 pt-1 border-t border-border/50">
             <button onClick={() => toggleLike(post.id)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-colors ${post.liked ? "text-red-400 bg-red-500/10" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}>
