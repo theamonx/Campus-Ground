@@ -3,6 +3,7 @@
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use Illuminate\Auth\Middleware\RequirePassword;
+use App\Http\Controllers\AvatarController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
@@ -10,6 +11,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::put('/settings/avatar', [AvatarController::class, 'update'])->name('avatar.update');
+    Route::delete('/settings/avatar', [AvatarController::class, 'destroy'])->name('avatar.destroy');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

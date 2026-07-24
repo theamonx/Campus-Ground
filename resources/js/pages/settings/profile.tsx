@@ -1,6 +1,7 @@
 import { Form, Head, usePage } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import AvatarController from '@/actions/App/Http/Controllers/AvatarController';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
@@ -10,9 +11,16 @@ import { Label } from '@/components/ui/label';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
 import type { Auth } from '@/types';
+import { useRef, useState } from 'react';
 
 type PageProps = {
     auth: Auth;
+};
+
+const roleLabels: Record<string, string> = {
+    student: 'Student',
+    professor: 'Professor',
+    admin: 'Admin',
 };
 
 export default function Profile({
@@ -23,19 +31,72 @@ export default function Profile({
     status?: string;
 }) {
     const { auth } = usePage<PageProps>().props;
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [preview, setPreview] = useState<string | null>(null);
 
     return (
         <>
             <Head title="Profile settings" />
-
             <h1 className="sr-only">Profile settings</h1>
-
             <div className="space-y-6">
                 <Heading
                     variant="small"
                     title="Profile"
                     description="Update your name and email address"
                 />
+
+                {/* Avatar upload */}
+                <div className="space-y-4">
+                    <Label>Avatar</Label>
+                    <div className="flex items-center gap-4">
+                        <img
+                            src={preview ?? auth.user.avatar_url ?? '/images/default-avatar.png'}
+                            alt={auth.user.name}
+                            className="h-16 w-16 rounded-full object-cover"
+                        />
+                        <Form
+                            {...AvatarController.update.form()}
+                            options={{ preserveScroll: true }}
+                            onSuccess={() => setPreview(null)}
+                        >
+                            {({ processing, errors }) => (
+                                <div className="flex flex-col gap-2">
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        name="avatar"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                setPreview(URL.createObjectURL(file));
+                                                e.target.form?.requestSubmit();
+                                            }
+                                        }}
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        disabled={processing}
+                                        onClick={() => fileInputRef.current?.click()}
+                                    >
+                                        {processing ? 'Uploading...' : 'Change avatar'}
+                                    </Button>
+                                    <InputError message={errors.avatar} />
+                                </div>
+                            )}
+                        </Form>
+                    </div>
+                </div>
+
+                {/* Role (read-only) */}
+                <div className="grid gap-2">
+                    <Label>Role</Label>
+                    <p className="text-sm text-muted-foreground">
+                        {roleLabels[auth.user.role] ?? auth.user.role}
+                    </p>
+                </div>
 
                 <Form
                     {...ProfileController.update.form()}
@@ -48,7 +109,6 @@ export default function Profile({
                         <>
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Name</Label>
-
                                 <Input
                                     id="name"
                                     className="mt-1 block w-full"
@@ -58,16 +118,13 @@ export default function Profile({
                                     autoComplete="name"
                                     placeholder="Full name"
                                 />
-
                                 <InputError
                                     className="mt-2"
                                     message={errors.name}
                                 />
                             </div>
-
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email address</Label>
-
                                 <Input
                                     id="email"
                                     type="email"
@@ -78,13 +135,11 @@ export default function Profile({
                                     autoComplete="username"
                                     placeholder="Email address"
                                 />
-
                                 <InputError
                                     className="mt-2"
                                     message={errors.email}
                                 />
                             </div>
-
                             {mustVerifyEmail &&
                                 auth.user.email_verified_at === null && (
                                     <div>
@@ -99,7 +154,6 @@ export default function Profile({
                                                 verification email.
                                             </Link>
                                         </p>
-
                                         {status ===
                                             'verification-link-sent' && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
@@ -109,7 +163,6 @@ export default function Profile({
                                         )}
                                     </div>
                                 )}
-
                             <div className="flex items-center gap-4">
                                 <Button
                                     disabled={processing}
@@ -122,12 +175,10 @@ export default function Profile({
                     )}
                 </Form>
             </div>
-
             <DeleteUser />
         </>
     );
 }
-
 Profile.layout = {
     breadcrumbs: [
         {

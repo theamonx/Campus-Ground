@@ -13,6 +13,10 @@ use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
+use App\Http\Responses\LoginResponse;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
+use App\Http\Responses\RegisterResponse;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -21,7 +25,9 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
+         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
+        $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
     }
 
     /**
@@ -29,6 +35,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Fortify::createUsersUsing(CreateNewUser::class);
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();

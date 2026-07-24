@@ -8,6 +8,8 @@ import {
 import { Link, usePage } from "@inertiajs/react";
 import { StudentProvider, useStudent } from "@/contexts/StudentContext";
 import { CampusUser, PageSharedProps } from "@/types"; // Import from your types package
+import type { Auth } from '@/types/auth';
+import { useAuth } from '@/hooks/use-auth';
 
 interface StudentLayoutProps {
   children: React.ReactNode;
@@ -40,6 +42,7 @@ function LayoutShell({ children }: StudentLayoutProps) {
   // Strongly typed using your custom CampusUser shape from index.ts
   const authUser: CampusUser =  mockStudent;
   // const authUser: CampusUser = props.auth?.user || mockStudent;
+  const { user } = useAuth();
 
  // Use the global state context instead of local useState!
   const { anon, setAnon } = useStudent();
@@ -121,7 +124,7 @@ function LayoutShell({ children }: StudentLayoutProps) {
           <img src={authUser.avatar || "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&auto=format"} alt="Profile" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium truncate">{authUser.fullName}</p>
+              <p className="text-xs font-medium truncate">{user.name}</p>
               <p className="text-[10px] text-muted-foreground truncate">{authUser.department} · Year {authUser.year}</p>
             </div>
           )}

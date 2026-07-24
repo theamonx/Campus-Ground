@@ -1,27 +1,42 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
+// Public homepage — unchanged
 Route::inertia('/', 'home')->name('home');
-Route::inertia('/login', 'login')->name('login');
-Route::get('/student', [StudentController::class, 'index']);
-Route::inertia('/student/profile', 'student/StuProfile');
-Route::inertia('/student/achievements', 'student/StuAchievements');
-Route::inertia('/student/duels', 'student/StuDuels');
-Route::inertia('/student/groups', 'student/StuGroups');
-Route::inertia('/student/clubs', 'student/StuClubs');
-Route::inertia('/student/events', 'student/StuEvents');
-Route::inertia('/student/protests', 'student/StuProtests');
-Route::inertia('/professor', 'professor/ProfDashboard')->name('professor');
-Route::inertia('/professor/assignments', 'professor/ProfAssignments');
-Route::inertia('/professor/attendance', 'professor/ProfAttendance');
-Route::inertia('/professor/events', 'professor/ProfEvents');
-Route::inertia('/professor/grades', 'professor/ProfGrades');
-Route::inertia('/professor/groups', 'professor/ProfGroups');
-Route::inertia('/professor/notices', 'professor/ProfNotices');
-Route::inertia('/professor/resources', 'professor/ProfResources');
 
+// Admin only
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/admin', fn () => Inertia::render('admin/dashboard'))->name('admin.dashboard');
+});
+
+// Professor only
+Route::middleware(['auth', 'verified', 'role:professor'])->prefix('professor')->group(function () {
+    Route::inertia('/', 'professor/ProfDashboard')->name('professor');
+    Route::inertia('/assignments', 'professor/ProfAssignments');
+    Route::inertia('/attendance', 'professor/ProfAttendance');
+    Route::inertia('/events', 'professor/ProfEvents');
+    Route::inertia('/grades', 'professor/ProfGrades');
+    Route::inertia('/groups', 'professor/ProfGroups');
+    Route::inertia('/notices', 'professor/ProfNotices');
+    Route::inertia('/resources', 'professor/ProfResources');
+});
+
+// Student only
+Route::middleware(['auth', 'verified', 'role:student'])->prefix('student')->group(function () {
+    Route::get('/', [StudentController::class, 'index'])->name('student');
+    Route::inertia('/profile', 'student/StuProfile');
+    Route::inertia('/achievements', 'student/StuAchievements');
+    Route::inertia('/duels', 'student/StuDuels');
+    Route::inertia('/groups', 'student/StuGroups');
+    Route::inertia('/clubs', 'student/StuClubs');
+    Route::inertia('/events', 'student/StuEvents');
+    Route::inertia('/protests', 'student/StuProtests');
+});
+
+// Generic authenticated dashboard, if still used anywhere
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 });

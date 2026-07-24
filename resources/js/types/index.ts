@@ -1,5 +1,21 @@
 export type Page = "home" | "professor" | "student";
 
+// resources/js/types/index.d.ts
+
+export type UserRole = 'student' | 'professor' | 'admin';
+
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    role: UserRole;
+    avatar: string | null;
+    avatar_url: string | null;
+    email_verified_at: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
 export type Post = {
   id: number;
   author: string;
