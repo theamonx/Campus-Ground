@@ -28,4 +28,11 @@ export default defineConfig({
             formVariants: true,
         }),
     ],
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        hmr: {
+            host: '10.42.206.138', // <-- your actual laptop IP from step 1
+        },
+    },
 });

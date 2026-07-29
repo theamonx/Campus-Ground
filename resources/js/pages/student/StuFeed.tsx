@@ -2,8 +2,11 @@ import { useRef, useState } from "react";
 import { Shield, Send, Image, Link2, Hash, Trophy, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Eye, EyeOff } from "lucide-react";
 import StudentLayout from '@/layouts/student-layout';
 import { useStudent } from '@/contexts/StudentContext';
-import { AnonAvatar, TypePill } from "@/common";
+import { AnonAvatar, UserAvatar, TypePill } from "@/common";
 import type { Post } from "@/types";
+import type { Auth } from '@/types/auth';
+import { useAuth } from '@/hooks/use-auth';
+import { router, usePage, useForm } from '@inertiajs/react';
 
 // const feedPosts: Post[] = [
 //   { id: 1, author: "Meera Joshi", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&auto=format", handle: "@meera.joshi", time: "2m ago", type: "achievement", content: "Just cleared HackBit 2025 and placed 1st in the Systems track! 8 months of grinding finally paid off. Thank you @DevClub for the prep sessions 🏆", tag: "Achievement", likes: 148, comments: 24, liked: false, saved: false },
@@ -14,7 +17,9 @@ import type { Post } from "@/types";
 // ];
 
 export default function StuFeed({ thoughts }) {
+  const { user } = useAuth();
   const { anon } = useStudent();
+  const { errors } = usePage().props;
   const [posts, setPosts] = useState(thoughts);
   const [draft, setDraft] = useState("");
   const [draftTag, setDraftTag] = useState("");
@@ -42,28 +47,35 @@ export default function StuFeed({ thoughts }) {
   };
 
   const publishPost = () => {
-    const content = draft.trim();
+    const message = draft.trim();
 
-    if (!content && !draftLink && !draftImage) {
+    if (!message && !draftLink && !draftImage) {
       return;
     }
 
     const nextPost: Post = {
-      id: Date.now(),
-      author: anon ? "Anonymous" : "Priya Nair",
-      avatar: anon ? "" : "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&auto=format",
-      handle: anon ? "@anon·protected" : "@priya.nair",
+      user : user,
       time: "Just now",
-      content: content || draftLink || "Shared a campus update.",
+      message: message || draftLink || "Shared a campus update.",
       type: draftType,
       likes: 0,
       comments: 0,
       liked: false,
       saved: false,
-      anon,
+      anon: anon ? true : false,
       tag: draftTag || undefined,
       image: draftImage || undefined,
     };
+
+
+    const newPost = {
+      message: message || draftLink || "Shared a campus update.",
+      type: draftType || 'post',
+    };
+    router.post('/student', newPost, {
+        preserveState: true,
+        preserveScroll: true,
+    });
 
     setPosts(current => [nextPost, ...current]);
     setDraft("");
@@ -75,11 +87,15 @@ export default function StuFeed({ thoughts }) {
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-4">
-      <div className="bg-card border border-border rounded-2xl p-4">
-        <div className="flex items-center gap-3 mb-3">
-          {anon ? <AnonAvatar /> : <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&auto=format" alt="You" className="w-10 h-10 rounded-full object-cover" />}
-          <div className="flex-1 flex flex-col gap-2">
-            <input value={draft} onChange={e => setDraft(e.target.value)} placeholder={anon ? "Posting anonymously…" : "What's on your mind?"} className="w-full bg-secondary rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/30 transition" />
+      <div className="bg-card border border-border rounded-2xl relative z-20 p-4">
+        <div className="flex flex-col items-start gap-3 mb-3">
+          <div className="flex gap-4 items-start text-sm font-bold">
+          {anon ? <AnonAvatar /> : user.avatar ? <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" /> : <UserAvatar />}
+
+              {anon ? <p>Anonymous</p> : <div className="flex flex-col"><p>{user.name}</p> <span className="text-muted-foreground italic text-xs">{user.email}</span></div> }
+          </div>
+          <div className="flex flex-col w-full gap-2">
+            <textarea value={draft} onChange={e => setDraft(e.target.value)} placeholder={anon ? "Posting anonymously…" : "What's on your mind?"} className="w-full bg-secondary rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/30 transition"></textarea>
             {(draftLink || draftImage) && (
               <div className="flex flex-wrap gap-2 text-[11px] text-muted-foreground">
                 {draftLink && <span className="bg-secondary border border-border px-2 py-1 rounded-full truncate max-w-full">Link attached</span>}
@@ -117,18 +133,18 @@ export default function StuFeed({ thoughts }) {
             }} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground px-3 py-1.5 rounded-lg hover:bg-secondary transition-colors"><Icon size={13} />{label}</button>
           ))}
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={(event) => handleFileUpload(event.target.files?.[0])} />
-          <button onClick={publishPost} className="ml-auto flex items-center gap-1.5 bg-primary text-background px-4 py-1.5 rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"><Send size={12} />Post</button>
+          <button onClick={publishPost} className="ml-auto absolute sm:static top-4 right-4 flex items-center gap-1.5 bg-primary text-background px-4 py-1.5 rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"><Send size={12} />Post</button>
         </div>
         {anon && <div className="mt-2 flex items-center gap-2 text-[10px] text-primary bg-primary/5 rounded-lg px-3 py-1.5 border border-primary/10"><Shield size={10} />Your identity is protected in this post</div>}
       </div>
       {posts.map(post => (
-        <div key={post.id} className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-3">
+        <div key={post.user?.id} className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              {!post.anon ? <AnonAvatar /> : <img src={post.avatar} alt={post.user_id} className="w-10 h-10 rounded-full object-cover" />}
+              {post.anon ? <AnonAvatar /> : post.user?.avatar ? <img src={post.user?.avatar} alt={post.user?.name} className="w-10 h-10 rounded-full object-cover" /> : <UserAvatar/>}
               <div>
-                <div className="flex items-center gap-2"><p className="text-sm font-semibold">{post.user.name}</p>{post.anon ? <span className="flex items-center gap-1 text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20"><Shield size={8} />Protected</span> : ''}</div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><span>{post.user.email}</span><span>·</span><span>{post.relative_time}</span></div>
+                <div className="flex items-center gap-2"><p className="text-sm font-semibold">{post.user?.name}</p>{post.anon ? <span className="flex items-center gap-1 text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20"><Shield size={8} />Protected</span> : ''}</div>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><span>{post.user?.email}</span><span>·</span><span>{post.relative_time}</span></div>
               </div>
             </div>
             <div className="flex items-center gap-2"><TypePill type={post.type} /><button className="text-muted-foreground hover:text-foreground p-1"><MoreHorizontal size={15} /></button></div>

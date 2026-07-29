@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Thought extends Model
 {
     protected $fillable = [
+        'user_id',
         'message',
         'type',
     ];

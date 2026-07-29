@@ -17,12 +17,14 @@ export interface User {
 }
 
 export type Post = {
-  id: number;
-  author: string;
-  avatar: string;
-  handle: string;
+  user : {
+      id: number;
+      name: string;
+      avatar: string;
+      email: string;
+  },
   time: string;
-  content: string;
+  message: string;
   type: "achievement" | "post" | "duel" | "protest" | "event";
   likes: number;
   comments: number;

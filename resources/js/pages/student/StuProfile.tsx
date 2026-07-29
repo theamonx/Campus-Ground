@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { Settings, CheckCircle, X, Save, Pencil } from 'lucide-react';
 import StudentLayout from '@/layouts/student-layout';
+import type { Auth } from '@/types/auth';
+import { useAuth } from '@/hooks/use-auth';
+import {UserAvatar } from "@/common";
 
 export default function StuProfile() {
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    name: 'Priya Nair',
-    handle: '@priya.nair',
+    name: user.name,
+    handle: user.email,
     year: 'CS 3rd Year',
     college: 'IIT Bombay',
     bio: 'Full-stack dev, open source contributor, occasional writer. Building in public.',
     skills: ['React', 'Python', 'System Design', 'Open Source', 'ML Basics'],
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&auto=format',
+    avatar: user.avatar,
     cover: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=900&h=200&fit=crop&auto=format',
     posts: '84',
     followers: '1.2k',
@@ -112,11 +116,14 @@ export default function StuProfile() {
           <div className="flex items-end justify-between -mt-8 mb-4">
             {/* Profile Picture */}
             <div className="relative group">
+            {
+              user.avatar ?
               <img
-                src={isEditing ? editForm.avatar : profile.avatar}
+                src={isEditing ? editForm.avatar : user.avatar}
                 alt="Profile"
                 className="w-20 h-20 rounded-2xl object-cover border-4 border-card"
-              />
+              /> : <UserAvatar/>
+            }
               <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-400 border-2 border-card" />
               {isEditing && (
                 <label className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">

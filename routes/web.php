@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified', 'role:professor'])->prefix('professor')->
 // Student only
 Route::middleware(['auth', 'verified', 'role:student'])->prefix('student')->group(function () {
     Route::get('/', [StudentController::class, 'index'])->name('student');
+    Route::post('/', [StudentController::class, 'store']);
     Route::inertia('/profile', 'student/StuProfile');
     Route::inertia('/achievements', 'student/StuAchievements');
     Route::inertia('/duels', 'student/StuDuels');

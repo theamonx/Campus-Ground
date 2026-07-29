@@ -1,4 +1,4 @@
-## For Tomorrow:
-- make two layouts one for student and one for teacher.
-- make students thoughts/tweets work dummy or database.
-- integrate login forms.
+## Updates:
+- making responsive for mobile devlopement as well.
+- changed vite.config, .env, package.json
+- 

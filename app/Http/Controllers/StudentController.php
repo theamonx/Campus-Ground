@@ -21,4 +21,16 @@ class StudentController extends Controller
             'thoughts' => $thoughts,
         ]);
     }
+
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'message' => 'required|string',
+            'type' => 'required|string',
+        ]);
+        $request->user()->thoughts()->create([
+            'message' => $validated['message'],
+            'type' => $validated['type'],
+        ]);
+        return redirect()->back()->with('message', 'Post saved successfully!');
+    }
 }

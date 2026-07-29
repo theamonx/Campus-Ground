@@ -1,4 +1,5 @@
 export { AnonAvatar } from "./AnonAvatar";
+export { UserAvatar } from "./UserAvatar";
 export { TypePill } from "./TypePill";
 export { ProtestStatus } from "./ProtestStatus";
 export { AssignBadge } from "./AssignBadge";

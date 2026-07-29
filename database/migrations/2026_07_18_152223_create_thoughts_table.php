@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('thoughts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('message', 255);
+            $table->text('message');
             $table->enum('type', ['achievement', 'post', 'duel', 'protest', 'event']);
             $table->integer('likes')->default(0);
             $table->integer('comments')->default(0);
